@@ -21,6 +21,9 @@ public class BeanLogicTest {
     private static DAOFactory daoFactory = DAOFactory.getInstance();
     private static IDAOLogic DAO_LOGIC = daoFactory.getDaoLogic();
 
+    @Test
+    public void stringToOperationTypeTest() {
+    
         OperationType actual = null;
         String string = "earn +";
 
