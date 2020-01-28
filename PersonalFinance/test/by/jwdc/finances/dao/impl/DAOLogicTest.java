@@ -2,6 +2,7 @@ package by.jwdc.finances.dao.impl;
 
 import by.jwdc.finances.bean.BeanFactory;
 import by.jwdc.finances.bean.IBeanLogic;
+import by.jwdc.finances.bean.bean.DateTime;
 import by.jwdc.finances.bean.bean.FinanceOperation;
 import by.jwdc.finances.bean.bean.OperationType;
 import by.jwdc.finances.bean.exception.BeanInitialisationException;
@@ -10,12 +11,12 @@ import by.jwdc.finances.bean.exception.BeanWrongParameterException;
 import by.jwdc.finances.dao.DAOFactory;
 import by.jwdc.finances.dao.IDAOLogic;
 import by.jwdc.finances.dao.exception.DAOException;
-import by.jwdc.finances.dao.exception.FinanceOperationDAOException;
+import by.jwdc.finances.dao.exception.DAOFinanceOperationAlreadyExistException;
+import by.jwdc.finances.dao.exception.DAOFinanceOperationException;
+import by.jwdc.finances.dao.exception.DAOOperationTypeAlreadyExistsException;
+import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashSet;
 
 public class DAOLogicTest {
@@ -38,13 +39,13 @@ public class DAOLogicTest {
 
         try {
             DAO_LOGIC.fillOperationType(ALL_OPERATION_TYPES);
-        } catch (FinanceOperationDAOException e) {
+        } catch (DAOFinanceOperationException e) {
             e.printStackTrace();
         } catch (DAOException e) {
             e.printStackTrace();
         }
 
-        for (OperationType ot : ALL_OPERATION_TYPES){
+        for (OperationType ot : ALL_OPERATION_TYPES) {
             System.out.println(ot);
         }
     }
@@ -93,7 +94,7 @@ public class DAOLogicTest {
             e.printStackTrace();
         }
 
-        for (FinanceOperation fo : financeOperations){
+        for (FinanceOperation fo : financeOperations) {
             System.out.println(fo);
         }
     }
@@ -108,19 +109,64 @@ public class DAOLogicTest {
             e.printStackTrace();
         }
 
-        GregorianCalendar tempDate;
+        DateTime tempDate;
         int i = 0;
-        for (FinanceOperation fo : list){
+        for (FinanceOperation fo : list) {
 
             tempDate = fo.getDate();
-            tempDate.add(Calendar.MINUTE, 30);
+            tempDate.setMinute(tempDate.getMinute() + 1);
             fo.setDate(tempDate);
 
             try {
                 DAO_LOGIC.addFinanceOperation(fo);
-            } catch (DAOException e) {
+            } catch (DAOException | DAOFinanceOperationAlreadyExistException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Test
+    public void addOperationTypeTest() {
+
+        OperationType newOperationType = new OperationType("newTestType", false);
+
+        Object oldSet = new HashSet<OperationType>();
+        try {
+            oldSet = BEAN_FACTORY.getAllOperationTypes().clone();
+        } catch (BeanInitialisationException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            DAO_LOGIC.addOperationType(newOperationType);
+        } catch (DAOException e) {
+            e.printStackTrace();
+        } catch (DAOOperationTypeAlreadyExistsException e) {
+            e.printStackTrace();
+        }
+
+        Object newSetFromMemory = null;
+
+        try {
+            newSetFromMemory = BEAN_FACTORY.getAllOperationTypes().clone();
+        } catch (BeanInitialisationException e) {
+            e.printStackTrace();
+        }
+
+        HashSet<OperationType> newSetFromFile = new HashSet<OperationType>();
+
+        try {
+            DAO_LOGIC.fillOperationType(newSetFromFile);
+        } catch (DAOFinanceOperationException e) {
+            e.printStackTrace();
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+
+        boolean actual = oldSet.equals(newSetFromMemory);
+        Assert.assertFalse(actual);
+
+        actual = oldSet.equals(newSetFromFile);
+        Assert.assertFalse(actual);
     }
 }

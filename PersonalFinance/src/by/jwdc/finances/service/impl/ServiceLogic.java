@@ -4,8 +4,10 @@ import by.jwdc.finances.bean.bean.FinanceOperation;
 import by.jwdc.finances.dao.DAOFactory;
 import by.jwdc.finances.dao.IDAOLogic;
 import by.jwdc.finances.dao.exception.DAOException;
+import by.jwdc.finances.dao.exception.DAOFinanceOperationAlreadyExistException;
 import by.jwdc.finances.service.IServiceLogic;
 import by.jwdc.finances.service.exception.ServiceException;
+import by.jwdc.finances.service.exception.ServiceFinanceOperationAlreadyExistException;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,14 +31,18 @@ public class ServiceLogic implements IServiceLogic {
     }
 
     @Override
-    public boolean addFinanceOperation(FinanceOperation financeOperation) throws ServiceException {
+    public boolean addFinanceOperation(FinanceOperation financeOperation) throws ServiceException, ServiceFinanceOperationAlreadyExistException {
 
         boolean successFlag = false;
 
         try {
             DAO_LOGIC.addFinanceOperation(financeOperation);
             successFlag = true;
-        } catch (DAOException e) {
+        }
+        catch (DAOFinanceOperationAlreadyExistException e){
+            throw new ServiceFinanceOperationAlreadyExistException("Such record already exists");
+        }
+        catch (DAOException e) {
             throw new ServiceException("fail attempt to add the finance operation");
         }
 

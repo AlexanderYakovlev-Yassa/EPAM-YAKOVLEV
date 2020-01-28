@@ -6,9 +6,8 @@ import by.jwdc.finances.bean.impl.BeanLogic;
 import by.jwdc.finances.dao.DAOFactory;
 import by.jwdc.finances.dao.IDAOLogic;
 import by.jwdc.finances.dao.exception.DAOException;
-import by.jwdc.finances.dao.exception.FinanceOperationDAOException;
+import by.jwdc.finances.dao.exception.DAOFinanceOperationException;
 
-import javax.management.BadAttributeValueExpException;
 import java.util.HashSet;
 
 public class BeanFactory {
@@ -35,7 +34,7 @@ public class BeanFactory {
         if (ALL_OPERATION_TYPES.isEmpty()){
             try {
                 daoLogic.fillOperationType(ALL_OPERATION_TYPES);
-            } catch (FinanceOperationDAOException e) {
+            } catch (DAOFinanceOperationException e) {
                 throw new BeanInitialisationException("Fail initialisation of operation type list", e);
             } catch (DAOException e) {
                 throw new BeanInitialisationException("Fail initialisation of operation type list", e);

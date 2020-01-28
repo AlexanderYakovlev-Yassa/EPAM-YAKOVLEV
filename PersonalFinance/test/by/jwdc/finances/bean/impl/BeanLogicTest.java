@@ -2,6 +2,7 @@ package by.jwdc.finances.bean.impl;
 
 import by.jwdc.finances.bean.BeanFactory;
 import by.jwdc.finances.bean.IBeanLogic;
+import by.jwdc.finances.bean.bean.DateTime;
 import by.jwdc.finances.bean.bean.FinanceOperation;
 import by.jwdc.finances.bean.bean.OperationType;
 import by.jwdc.finances.bean.exception.BeanException;
@@ -13,7 +14,7 @@ import by.jwdc.finances.dao.IDAOLogic;
 import by.jwdc.finances.dao.exception.DAOException;
 import org.junit.Test;
 
-import java.util.GregorianCalendar;
+
 import java.util.HashSet;
 
 public class BeanLogicTest {
@@ -70,7 +71,7 @@ public class BeanLogicTest {
    /* @Test
     public void dateToStringTest() {
 
-        GregorianCalendar date = new GregorianCalendar();
+        DateTime date = new DateTime();
 
         BeanLogic beanLogic = new BeanLogic();
 
@@ -100,7 +101,7 @@ public class BeanLogicTest {
 
         String dateString = "20-01-2020-12:00";
 
-        GregorianCalendar date = null;
+        DateTime date = null;
 
         try {
             date = BEAN_LOGIC.stringToDate(dateString);
