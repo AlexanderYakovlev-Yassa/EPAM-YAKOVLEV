@@ -9,9 +9,7 @@ import by.jwdc.finances.bean.exception.BeanInitialisationException;
 import by.jwdc.finances.bean.exception.BeanNullParametersException;
 import by.jwdc.finances.bean.exception.BeanWrongParameterException;
 import by.jwdc.finances.dao.IDAOLogic;
-import by.jwdc.finances.dao.exception.DAOException;
-import by.jwdc.finances.dao.exception.DaoUtilException;
-import by.jwdc.finances.dao.exception.FinanceOperationDAOException;
+import by.jwdc.finances.dao.exception.*;
 import by.jwdc.finances.dao.util.FileUtil;
 
 import java.io.File;
@@ -27,14 +25,14 @@ public class DAOLogicFile implements IDAOLogic {
     private static final IBeanLogic BEAN_LOGIC = BEAN_FACTORY.getBeanLogic();
 
     @Override
-    public void fillOperationType(HashSet<OperationType> operationTypes) throws FinanceOperationDAOException, DAOException {
+    public void fillOperationType(HashSet<OperationType> operationTypes) throws DAOFinanceOperationException, DAOException {
 
         ArrayList<String> recordsList;
 
         try {
             recordsList = FileUtil.readFile(OPERATION_TYPE_FILE);
         } catch (DaoUtilException e) {
-            throw new FinanceOperationDAOException("Data source error", e);
+            throw new DAOFinanceOperationException("Data source error", e);
         }
 
         OperationType tempOperationType = null;
@@ -51,6 +49,38 @@ public class DAOLogicFile implements IDAOLogic {
 
             operationTypes.add(tempOperationType);
         }
+    }
+
+    @Override
+    public HashSet<FinanceOperation> getFinanceOperation() throws DAOException {
+
+        ArrayList<String> financeOperationString = null;
+        try {
+            financeOperationString = FileUtil.readFile(FINANCE_OPERATION_FILE);
+        } catch (DaoUtilException e) {
+            throw new DAOException("Fail to get finance operations", e);
+        }
+
+        HashSet<FinanceOperation> financeOperations = new HashSet<>();
+        FinanceOperation tempFinancelOperation = null;
+
+        for (String s : financeOperationString) {
+
+            try {
+                tempFinancelOperation = BEAN_LOGIC.stringToFinanceOperation(s);
+            } catch (BeanNullParametersException |
+                    BeanWrongParameterException |
+                    BeanInitialisationException |
+                    BeanException e) {
+                throw new DAOException("Fail to get finance operations", e);
+            }
+
+            if (tempFinancelOperation != null) {
+                financeOperations.add(tempFinancelOperation);
+            }
+        }
+
+        return financeOperations;
     }
 
     @Override
@@ -82,42 +112,16 @@ public class DAOLogicFile implements IDAOLogic {
     }
 
     @Override
-    public HashSet<FinanceOperation> getFinanceOperation() throws DAOException {
+    public boolean addFinanceOperation(FinanceOperation financeOperation) throws DAOException, DAOFinanceOperationAlreadyExistException {
 
-        ArrayList<String> financeOperationString = null;
-        try {
-            financeOperationString = FileUtil.readFile(FINANCE_OPERATION_FILE);
-        } catch (DaoUtilException e) {
-            throw new DAOException("Fail to get finance operations", e);
+        HashSet<FinanceOperation> allFinanceOperation = getFinanceOperation();
+
+        if (allFinanceOperation.contains(financeOperation)){
+            throw new DAOFinanceOperationAlreadyExistException("Such record already exists");
         }
-
-        HashSet<FinanceOperation> financeOperations = new HashSet<>();
-        FinanceOperation tempFinancelOperation = null;
-
-        for (String s : financeOperationString) {
-
-            try {
-                tempFinancelOperation = BEAN_LOGIC.stringToFinanceOperation(s);
-            } catch (BeanNullParametersException | BeanWrongParameterException e) {
-                throw new DAOException("Fail to get finance operations", e);
-            } catch (BeanInitialisationException e) {
-                e.printStackTrace();
-            } catch (BeanException e) {
-                //needs to add operation type to operation type set
-            }
-
-            if (tempFinancelOperation != null) {
-                financeOperations.add(tempFinancelOperation);
-            }
-        }
-
-        return financeOperations;
-    }
-
-    @Override
-    public boolean addFinanceOperation(FinanceOperation financeOperation) throws DAOException {
 
         String stringFinanceOperation = BEAN_LOGIC.FinanceOperationToString(financeOperation);
+
         boolean successFlag = false;
 
         try {
@@ -133,6 +137,27 @@ public class DAOLogicFile implements IDAOLogic {
     @Override
     public boolean deleteFinanceOperation(FinanceOperation financeOperation) {
         return false;
+    }
+
+    @Override
+    public boolean addOperationType(OperationType operationType) throws DAOException, DAOOperationTypeAlreadyExistsException {
+
+        HashSet<OperationType> allOperationTypes = null;
+        boolean res = false;
+
+        try {
+            allOperationTypes = BEAN_FACTORY.getAllOperationTypes();
+        } catch (BeanInitialisationException e) {
+            throw new DAOException("Can't get operation type set");
+        }
+
+        if (allOperationTypes.contains(operationType)){
+            throw new DAOOperationTypeAlreadyExistsException("Such Operation type already exists");
+        }
+
+        allOperationTypes.add(operationType);
+        saveOperationType();
+        return true;
     }
 
 }

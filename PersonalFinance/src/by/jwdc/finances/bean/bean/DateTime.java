@@ -95,12 +95,11 @@ public class DateTime implements Serializable, Comparable<DateTime> {
         if (this == o) {
             return true;
         }
-        if (!(o.getClass() != this.getClass())) {
+        if ((o.getClass() != this.getClass())) {
             return false;
         }
 
         DateTime dateTime = (DateTime) o;
-
         return compareTo(dateTime) == 0;
     }
 

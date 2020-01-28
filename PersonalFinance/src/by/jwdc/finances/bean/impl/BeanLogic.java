@@ -2,6 +2,7 @@ package by.jwdc.finances.bean.impl;
 
 import by.jwdc.finances.bean.BeanFactory;
 import by.jwdc.finances.bean.IBeanLogic;
+import by.jwdc.finances.bean.bean.DateTime;
 import by.jwdc.finances.bean.bean.FinanceOperation;
 import by.jwdc.finances.bean.bean.OperationType;
 import by.jwdc.finances.bean.exception.BeanException;
@@ -10,10 +11,7 @@ import by.jwdc.finances.bean.exception.BeanNullParametersException;
 import by.jwdc.finances.bean.exception.BeanWrongParameterException;
 import by.jwdc.finances.bean.validator.Validator;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashSet;
-import java.util.TimeZone;
 
 public class BeanLogic implements IBeanLogic {
 
@@ -119,12 +117,12 @@ public class BeanLogic implements IBeanLogic {
             throw new BeanWrongParameterException("Can't create finance operation. Wrong date-time parameters.");
         }
 
-        GregorianCalendar date = new GregorianCalendar();
-        date.set(Calendar.YEAR, year);
-        date.set(Calendar.MONTH, month);
-        date.set(Calendar.DAY_OF_MONTH, day);
-        date.set(Calendar.HOUR_OF_DAY, hour);
-        date.set(Calendar.MINUTE, minute);
+        DateTime date = new DateTime();
+        date.setYear(year);
+        date.setMonth(month);
+        date.setDay(day);
+        date.setHour(hour);
+        date.setMinute(minute);
 
         OperationType type = null;
 
@@ -167,7 +165,7 @@ public class BeanLogic implements IBeanLogic {
     }
 
     @Override
-    public GregorianCalendar stringToDate(String string) throws BeanWrongParameterException {
+    public DateTime stringToDate(String string) throws BeanWrongParameterException {
 
         Validator validator = Validator.getInstance();
 
@@ -203,12 +201,12 @@ public class BeanLogic implements IBeanLogic {
             throw new BeanWrongParameterException("Wrong date-time parameters.");
         }
 
-        GregorianCalendar date = new GregorianCalendar();
-        date.set(Calendar.YEAR, year);
-        date.set(Calendar.MONTH, month);
-        date.set(Calendar.DAY_OF_MONTH, day);
-        date.set(Calendar.HOUR_OF_DAY, hour);
-        date.set(Calendar.MINUTE, minute);
+        DateTime date = new DateTime();
+        date.setYear(year);
+        date.setMonth(month);
+        date.setDay(day);
+        date.setHour(hour);
+        date.setMinute(minute);
 
         return date;
     }
@@ -240,7 +238,6 @@ public class BeanLogic implements IBeanLogic {
     public double stringToValue(String string) throws BeanException {
 
         string = string.replace(',', '.');
-
         double value = 0;
 
         try {
@@ -250,10 +247,11 @@ public class BeanLogic implements IBeanLogic {
         }
 
         if (value <= 0) {
+
             throw new BeanException("Can't convert to double value");
         }
 
-        return 0;
+        return value;
     }
 
     @Override
@@ -310,15 +308,15 @@ public class BeanLogic implements IBeanLogic {
         return null;
     }
 
-    private String dateToString(GregorianCalendar date){
+    private String dateToString(DateTime date){
 
         //date.set(Calendar.AM_PM, Calendar.PM);
 
-        String year = String.valueOf(date.get(Calendar.YEAR));
-        String moth = String.format("%02d", date.get(Calendar.MONTH));
-        String day = String.format("%02d", date.get(Calendar.DAY_OF_MONTH));
-        String hour = String.format("%02d", date.get(Calendar.HOUR_OF_DAY));
-        String minute = String.format("%02d", date.get(Calendar.MINUTE));
+        String year = String.valueOf(date.getYear());
+        String moth = String.format("%02d", date.getMonth());
+        String day = String.format("%02d", date.getDay());
+        String hour = String.format("%02d", date.getHour());
+        String minute = String.format("%02d", date.getMinute());
 
         String res = String.format("%s-%s-%s-%s:%s", day, moth, year, hour, minute);
 

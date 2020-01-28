@@ -5,6 +5,8 @@ import org.junit.Test;
 
 public class ValidatorTest {
 
+    private static Validator validator = Validator.getInstance();
+
     @Test
     public void isDateCorrect() {
 

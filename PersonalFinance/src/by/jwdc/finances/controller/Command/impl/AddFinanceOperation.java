@@ -2,6 +2,7 @@ package by.jwdc.finances.controller.Command.impl;
 
 import by.jwdc.finances.bean.BeanFactory;
 import by.jwdc.finances.bean.IBeanLogic;
+import by.jwdc.finances.bean.bean.DateTime;
 import by.jwdc.finances.bean.bean.FinanceOperation;
 import by.jwdc.finances.bean.bean.OperationType;
 import by.jwdc.finances.bean.exception.BeanException;
@@ -10,9 +11,10 @@ import by.jwdc.finances.controller.Command.Command;
 import by.jwdc.finances.dao.exception.DAOException;
 import by.jwdc.finances.service.IServiceLogic;
 import by.jwdc.finances.service.exception.ServiceException;
+import by.jwdc.finances.service.exception.ServiceFinanceOperationAlreadyExistException;
 import by.jwdc.finances.service.factory.ServiceFactory;
 
-import java.util.GregorianCalendar;
+
 import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,9 +33,8 @@ public class AddFinanceOperation implements Command {
         String REGEX = "time=([\\d-:]+)[\\s]" +
                 "type=([\\w]+)[\\s]" +
                 "value=([\\d]+[/.,]?[\\d]+)";
-        //String VALUE_REGEX = "value=([\\d]+[/.]?[\\d]+)";
 
-        String response;
+        String response = "";
 
         Pattern pattern = Pattern.compile(REGEX);
         Matcher matcher = pattern.matcher(request);
@@ -46,7 +47,7 @@ public class AddFinanceOperation implements Command {
         String typeString = matcher.group(2);
         String valueString = matcher.group(3);
 
-        GregorianCalendar date = null;
+        DateTime date = null;
 
         try {
             date = beanLogic.stringToDate(dateString);
@@ -84,6 +85,8 @@ public class AddFinanceOperation implements Command {
 
         try {
             success = logic.addFinanceOperation(financeOperation);
+        } catch (ServiceFinanceOperationAlreadyExistException e) {
+            response = "Such finance operation already exists";
         } catch (ServiceException e) {
             response = "Sorry... The finance operation was not added :(";
         }
@@ -91,7 +94,7 @@ public class AddFinanceOperation implements Command {
         if (success){
             response = POSITIVE_RESPONSE;
         } else {
-            response = "The finance operation was not added :(";
+            response = "The finance operation was not added :( " + response;
         }
 
         return response;
