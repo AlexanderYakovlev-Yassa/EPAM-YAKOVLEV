@@ -21,6 +21,7 @@ public class BeanLogicTest {
     private static DAOFactory daoFactory = DAOFactory.getInstance();
     private static IDAOLogic DAO_LOGIC = daoFactory.getDaoLogic();
 
+
     @Test
     public void stringToOperationTypeTest() {
     
@@ -102,5 +103,4 @@ public class BeanLogicTest {
 
         Assert.assertEquals(excepted, actual);
     }
-
 }
