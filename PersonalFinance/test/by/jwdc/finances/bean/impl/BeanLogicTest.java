@@ -14,9 +14,6 @@ import by.jwdc.finances.dao.IDAOLogic;
 import org.junit.Assert;
 import org.junit.Test;
 
-
-import java.util.HashSet;
-
 public class BeanLogicTest {
 
     private static BeanFactory factory = BeanFactory.getInstance();
@@ -24,13 +21,8 @@ public class BeanLogicTest {
     private static DAOFactory daoFactory = DAOFactory.getInstance();
     private static IDAOLogic DAO_LOGIC = daoFactory.getDaoLogic();
 
-
-
-
-<<<<<<< HEAD
-    
-=======
         OperationType actual = null;
+        String string = "earn +";
 
         try {
             actual = BEAN_LOGIC.stringToOperationType(string);
@@ -107,5 +99,5 @@ public class BeanLogicTest {
 
         Assert.assertEquals(excepted, actual);
     }
->>>>>>> publish
+
 }
