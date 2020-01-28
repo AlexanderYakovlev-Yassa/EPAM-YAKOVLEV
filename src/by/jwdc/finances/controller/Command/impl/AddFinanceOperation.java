@@ -2,7 +2,6 @@ package by.jwdc.finances.controller.Command.impl;
 
 import by.jwdc.finances.bean.BeanFactory;
 import by.jwdc.finances.bean.IBeanLogic;
-import by.jwdc.finances.bean.bean.DateTime;
 import by.jwdc.finances.bean.bean.FinanceOperation;
 import by.jwdc.finances.bean.bean.OperationType;
 import by.jwdc.finances.bean.exception.BeanException;
@@ -13,7 +12,7 @@ import by.jwdc.finances.service.IServiceLogic;
 import by.jwdc.finances.service.exception.ServiceException;
 import by.jwdc.finances.service.factory.ServiceFactory;
 
-
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -47,7 +46,7 @@ public class AddFinanceOperation implements Command {
         String typeString = matcher.group(2);
         String valueString = matcher.group(3);
 
-        DateTime date = null;
+        GregorianCalendar date = null;
 
         try {
             date = beanLogic.stringToDate(dateString);

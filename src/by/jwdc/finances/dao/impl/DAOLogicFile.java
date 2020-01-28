@@ -117,26 +117,7 @@ public class DAOLogicFile implements IDAOLogic {
     @Override
     public boolean addFinanceOperation(FinanceOperation financeOperation) throws DAOException {
 
-        HashSet<FinanceOperation> allFinanceOperation = getFinanceOperation();
-
-        /*if (allFinanceOperation.contains(financeOperation)){
-            throw new DAOException("Such record already exist");
-        }*/
-
-        for (FinanceOperation fo : allFinanceOperation){
-            System.out.println(financeOperation.getDate());
-            System.out.println(fo.getDate());
-            /*System.out.println(financeOperation.getType());
-            System.out.println(fo.getType());
-            System.out.println(financeOperation.getValue());
-            System.out.println(fo.getValue());*/
-            System.out.println(allFinanceOperation.contains(financeOperation));
-            System.out.println(financeOperation.equals(fo));
-
-        }
-
         String stringFinanceOperation = BEAN_LOGIC.FinanceOperationToString(financeOperation);
-
         boolean successFlag = false;
 
         try {

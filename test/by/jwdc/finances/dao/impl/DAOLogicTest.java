@@ -2,7 +2,6 @@ package by.jwdc.finances.dao.impl;
 
 import by.jwdc.finances.bean.BeanFactory;
 import by.jwdc.finances.bean.IBeanLogic;
-import by.jwdc.finances.bean.bean.DateTime;
 import by.jwdc.finances.bean.bean.FinanceOperation;
 import by.jwdc.finances.bean.bean.OperationType;
 import by.jwdc.finances.bean.exception.BeanInitialisationException;
@@ -16,7 +15,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 
 public class DAOLogicTest {
@@ -45,7 +44,7 @@ public class DAOLogicTest {
             e.printStackTrace();
         }
 
-        for (OperationType ot : ALL_OPERATION_TYPES) {
+        for (OperationType ot : ALL_OPERATION_TYPES){
             System.out.println(ot);
         }
     }
@@ -94,7 +93,7 @@ public class DAOLogicTest {
             e.printStackTrace();
         }
 
-        for (FinanceOperation fo : financeOperations) {
+        for (FinanceOperation fo : financeOperations){
             System.out.println(fo);
         }
     }
@@ -109,12 +108,12 @@ public class DAOLogicTest {
             e.printStackTrace();
         }
 
-        DateTime tempDate;
+        GregorianCalendar tempDate;
         int i = 0;
-        for (FinanceOperation fo : list) {
+        for (FinanceOperation fo : list){
 
             tempDate = fo.getDate();
-            tempDate.setMinute(tempDate.getMinute() + 1);
+            tempDate.add(Calendar.MINUTE, 30);
             fo.setDate(tempDate);
 
             try {

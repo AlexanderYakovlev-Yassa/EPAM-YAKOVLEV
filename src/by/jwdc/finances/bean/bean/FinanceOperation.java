@@ -2,15 +2,15 @@ package by.jwdc.finances.bean.bean;
 
 import java.io.Serializable;
 import java.util.Calendar;
-
+import java.util.GregorianCalendar;
 
 public class FinanceOperation implements Serializable {
 
-    private DateTime date;
+    private GregorianCalendar date;
     private OperationType type;
     private double value;
 
-    public FinanceOperation(DateTime date, OperationType type, double value) {
+    public FinanceOperation(GregorianCalendar date, OperationType type, double value) {
 
         this.date = date;
         this.type = type;
@@ -20,11 +20,11 @@ public class FinanceOperation implements Serializable {
     public FinanceOperation() {
     }
 
-    public DateTime getDate() {
+    public GregorianCalendar getDate() {
         return date;
     }
 
-    public void setDate(DateTime date) {
+    public void setDate(GregorianCalendar date) {
         this.date = date;
     }
 
@@ -56,14 +56,10 @@ public class FinanceOperation implements Serializable {
         if (this.getClass() != obj.getClass()) {
             return false;
         }
-        FinanceOperation fo = (FinanceOperation) obj;
-
-        System.out.println(date.equals(fo.date) &&
-                type.equals(fo.type) &&
-                (int) (value * 100) == (int) (fo.value * 100));
-        return date.equals(fo.date) &&
-                type.equals(fo.type) &&
-                (int) (value * 100) == (int) (fo.value * 100);
+        FinanceOperation financeOperation = (FinanceOperation) obj;
+        return date.equals(financeOperation.date) &&
+                type.equals(financeOperation.type) &&
+                (int) (value * 100) == (int) (financeOperation.value * 100);
     }
 
     @Override
@@ -81,8 +77,8 @@ public class FinanceOperation implements Serializable {
     @Override
     public String toString() {
         return this.getClass() + "{" +
-                " date=" + date.getMonth() + "-" + date.getDay() +
-                "-" + date.getYear() + "-" + date.getHour() + ":" + date.getMinute() + ", " +
+                " date=" + date.get(Calendar.DAY_OF_MONTH) + "-" + date.get(Calendar.MONTH) +
+                "-" + date.get(Calendar.YEAR) + "-" + date.get(Calendar.HOUR) + ":" + date.get(Calendar.MINUTE) + ", " +
                 " type=" + type + ", " +
                 " value=" + value +
                 "}";

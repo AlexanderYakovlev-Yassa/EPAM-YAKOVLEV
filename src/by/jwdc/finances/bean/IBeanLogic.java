@@ -1,6 +1,5 @@
 package by.jwdc.finances.bean;
 
-import by.jwdc.finances.bean.bean.DateTime;
 import by.jwdc.finances.bean.bean.FinanceOperation;
 import by.jwdc.finances.bean.bean.OperationType;
 import by.jwdc.finances.bean.exception.BeanException;
@@ -8,7 +7,7 @@ import by.jwdc.finances.bean.exception.BeanInitialisationException;
 import by.jwdc.finances.bean.exception.BeanNullParametersException;
 import by.jwdc.finances.bean.exception.BeanWrongParameterException;
 
-;
+import java.util.GregorianCalendar;
 
 public interface IBeanLogic {
 
@@ -20,7 +19,7 @@ public interface IBeanLogic {
 
     String FinanceOperationToString(FinanceOperation financeOperation);
 
-    DateTime stringToDate(String string) throws BeanWrongParameterException;
+    GregorianCalendar stringToDate(String string) throws BeanWrongParameterException;
     OperationType findOperationType(String string) throws BeanException;
     double stringToValue(String string) throws BeanException;
     OperationType newOperationType(String string);
