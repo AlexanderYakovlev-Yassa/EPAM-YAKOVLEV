@@ -11,7 +11,7 @@ import by.jwdc.finances.bean.exception.BeanNullParametersException;
 import by.jwdc.finances.bean.exception.BeanWrongParameterException;
 import by.jwdc.finances.dao.DAOFactory;
 import by.jwdc.finances.dao.IDAOLogic;
-import by.jwdc.finances.dao.exception.DAOException;
+import org.junit.Assert;
 import org.junit.Test;
 
 
@@ -30,17 +30,35 @@ public class BeanLogicTest {
 
         String string = "earn +";
 
-        OperationType type = null;
+        OperationType actual = null;
 
         try {
-            type = BEAN_LOGIC.stringToOperationType(string);
+            actual = BEAN_LOGIC.stringToOperationType(string);
         } catch (BeanNullParametersException e) {
             System.out.println("NULL EXCEPTION");
         } catch (BeanWrongParameterException e) {
             System.out.println("NULL EXCEPTION");
         }
 
-        System.out.println(type);
+        OperationType excepted = new OperationType("earn", true);
+
+        Assert.assertEquals(excepted, actual);
+
+        actual = null;
+
+        string = "earn+";
+
+        try {
+            actual = BEAN_LOGIC.stringToOperationType(string);
+        } catch (BeanNullParametersException e) {
+            System.out.println("NULL EXCEPTION");
+        } catch (BeanWrongParameterException e) {
+            System.out.println("NULL EXCEPTION");
+        }
+
+        excepted = null;
+
+        Assert.assertEquals(excepted, actual);
 
     }
 
@@ -49,10 +67,15 @@ public class BeanLogicTest {
 
         String string = "20-02-2020-20:00 earn 200";
 
-        FinanceOperation financeOperation = null;
+        FinanceOperation actual = null;
+
+        DateTime date = new DateTime(2020, 02, 20, 20, 00);
+        OperationType operationType = new OperationType("earn", true);
+        Double value = 200.0;
+        FinanceOperation excepted = new FinanceOperation(date, operationType, value);
 
         try {
-            financeOperation = BEAN_LOGIC.stringToFinanceOperation(string);
+            actual = BEAN_LOGIC.stringToFinanceOperation(string);
         } catch (BeanNullParametersException e) {
             System.out.println("NULL EXCEPTION");
             e.printStackTrace();
@@ -65,35 +88,7 @@ public class BeanLogicTest {
             e.printStackTrace();
         }
 
-        System.out.println();
-    }
-
-   /* @Test
-    public void dateToStringTest() {
-
-        DateTime date = new DateTime();
-
-        BeanLogic beanLogic = new BeanLogic();
-
-        String strDate = beanLogic.dateToString(date);
-
-        System.out.println(strDate);
-    }*/
-
-    @Test
-    public void FinanceOperationToStringTest() {
-
-        HashSet<FinanceOperation> financeOperation = null;
-
-        try {
-            financeOperation = DAO_LOGIC.getFinanceOperation();
-        } catch (DAOException e) {
-            e.printStackTrace();
-        }
-
-        for (FinanceOperation fo : financeOperation){
-            System.out.println(BEAN_LOGIC.FinanceOperationToString(fo));
-        }
+        Assert.assertEquals(excepted, actual);
     }
 
     @Test
@@ -101,14 +96,15 @@ public class BeanLogicTest {
 
         String dateString = "20-01-2020-12:00";
 
-        DateTime date = null;
+        DateTime actual = null;
+        DateTime excepted = new DateTime(2020,01,20,12,00);
 
         try {
-            date = BEAN_LOGIC.stringToDate(dateString);
+            actual = BEAN_LOGIC.stringToDate(dateString);
         } catch (BeanWrongParameterException e) {
             e.printStackTrace();
         }
 
-        System.out.println(date.toString());
+        Assert.assertEquals(excepted, actual);
     }
 }
