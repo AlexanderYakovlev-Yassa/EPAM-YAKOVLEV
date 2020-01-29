@@ -3,7 +3,7 @@ package by.jwdc.finances.bean.bean;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+
 
 public class FinanceOperationTest {
 
