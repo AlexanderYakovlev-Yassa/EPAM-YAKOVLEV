@@ -4,7 +4,8 @@ USE finances;
 CREATE TABLE operation_type ( 
 		id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 		type TINYTEXT,
-		income BOOL);
+		income BOOL,
+		CONSTRAINT operation_type PRIMARY KEY (id) );
 		
 CREATE TABLE finance_operation ( 
 		daytime DATETIME,
